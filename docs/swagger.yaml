@@ -1,0 +1,93 @@
+definitions:
+  errcode.ErrorMessage:
+    properties:
+      code:
+        type: string
+      details:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+    type: object
+  healthy.Response:
+    properties:
+      code:
+        type: string
+      data:
+        $ref: '#/definitions/healthy.Result'
+      details:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+    type: object
+  healthy.Result:
+    properties:
+      timestamp:
+        type: string
+    type: object
+  service.ErrorMessageResponse:
+    properties:
+      code:
+        type: string
+      data:
+        items:
+          $ref: '#/definitions/errcode.ErrorMessage'
+        type: array
+      details:
+        items:
+          type: string
+        type: array
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /error/message:
+    get:
+      consumes:
+      - application/json
+      operationId: ErrorMessages
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/service.ErrorMessageResponse'
+      summary: 获取错误码
+  /healthy:
+    get:
+      consumes:
+      - application/json
+      operationId: Healthy
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/healthy.Response'
+      summary: Healthy api for kubernetes readinessProbe
+  /metrics:
+    get:
+      operationId: PrometheusHandler
+      responses: {}
+      summary: Prometheus metrics
+  /ready:
+    get:
+      consumes:
+      - application/json
+      operationId: Ready
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/healthy.Response'
+      summary: Ready api for kubernetes readinessProbe
+swagger: "2.0"
