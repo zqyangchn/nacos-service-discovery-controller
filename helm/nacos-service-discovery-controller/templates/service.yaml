@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "nacos-service-discovery-controller.fullname" . }}
+  labels:
+    {{- include "nacos-service-discovery-controller.labels" . | nindent 4 }}
+  annotations:
+    {{- with .Values.serviceAnnotations }}
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "nacos-service-discovery-controller.selectorLabels" . | nindent 4 }}

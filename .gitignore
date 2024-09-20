@@ -18,4 +18,4 @@
 .idea/
 .DS_Store
 scripts/java/*.jar
-nacos-service-discovery-controller
+./nacos-service-discovery-controller
