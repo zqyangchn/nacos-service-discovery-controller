@@ -322,10 +322,11 @@ func (c *Collector) GetInstanceCount(service Service, stream chan InstanceCount,
 		Service: service,
 		Count:   0,
 	}
-	ListInstanceResponse, err := c.client.ListInstance(
+	listInstanceResponse, err := c.client.ListInstance(
 		nacos.ListInstanceParam{
 			NamespaceId: service.Id,
 			ServiceName: service.Name,
+			HealthyOnly: true,
 		},
 	)
 	if err != nil {
@@ -333,12 +334,12 @@ func (c *Collector) GetInstanceCount(service Service, stream chan InstanceCount,
 		goto Stream
 	}
 
-	if ListInstanceResponse == nil || ListInstanceResponse.Hosts == nil {
+	if listInstanceResponse == nil || listInstanceResponse.Hosts == nil {
 		instanceCount.Error = errors.New("ListInstanceResponse or is nil")
 		goto Stream
 	}
 
-	instanceCount.Count = len(ListInstanceResponse.Hosts)
+	instanceCount.Count = len(listInstanceResponse.Hosts)
 
 Stream:
 	stream <- instanceCount
